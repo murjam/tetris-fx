@@ -28,11 +28,11 @@ public class TetrisStart extends Application {
 		ObservableList<Node> contents = layout.getChildren();
 		
 		Figure figure = new Figure();
-		figure.getChildren().add(new Block(10, 10));
-		figure.getChildren().add(new Block(11, 10));
-		figure.getChildren().add(new Block(10, 11));
-		
-		
+		figure.getChildren().add(new Block(-1, 0));
+		figure.getChildren().add(new Block(0, 0));
+		figure.getChildren().add(new Block(1, 0));
+		figure.getChildren().add(new Block(0, 1));
+		figure.move(9, 0);
 		contents.add(figure);
 		
 		
@@ -40,6 +40,8 @@ public class TetrisStart extends Application {
 		scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
 			if (KeyCode.UP.equals(event.getCode())) {
 				figure.move(0, -1);
+				System.out.format("block absolute y: %.0f\n",
+						figure.getChildren().get(0).getLocalToSceneTransform().getTy());
 			}
 		});
 		
