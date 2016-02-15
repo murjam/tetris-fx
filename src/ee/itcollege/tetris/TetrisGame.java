@@ -4,43 +4,38 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javafx.application.Application;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import ee.itcollege.tetris.lib.FigureGenerator;
 import ee.itcollege.tetris.parts.Block;
 import ee.itcollege.tetris.parts.Figure;
 
-public class TetrisStart extends Application {
+public class TetrisGame extends Application {
 	
 	public static void main(String[] args) {
-		TetrisStart.launch(args);
+		TetrisGame.launch(args);
 	}
+	
+	
+	FigureGenerator figureGenerator = new FigureGenerator();
+	Figure figure = figureGenerator.createFigure();
 
 	@Override
 	public void start(Stage stage) throws Exception {
 		
 		Pane layout = new Pane();
 		
-		ObservableList<Node> contents = layout.getChildren();
-		
-		Figure figure = new Figure();
-		figure.getChildren().add(new Block(-1, 0));
-		figure.getChildren().add(new Block(0, 0));
-		figure.getChildren().add(new Block(1, 0));
-		figure.getChildren().add(new Block(0, 1));
 		figure.move(9, 0);
-		contents.add(figure);
-		
+		layout.getChildren().add(figure);
 		
 		Scene scene = new Scene(layout, Block.SIZE * 20, Block.SIZE * 40);
 		scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
 			if (KeyCode.UP.equals(event.getCode())) {
 				figure.move(0, -1);
-				System.out.format("block absolute y: %.0f\n",
+				System.out.format("first block absolute y: %.0f\n",
 						figure.getChildren().get(0).getLocalToSceneTransform().getTy());
 			}
 		});
