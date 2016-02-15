@@ -39,7 +39,8 @@ public class TetrisStart extends Application {
 		Scene scene = new Scene(layout, Block.SIZE * 20, Block.SIZE * 40);
 		scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
 			if (KeyCode.UP.equals(event.getCode())) {
-				figure.move(0, -1);
+				figure.rotateClockwise();
+				//figure.move(0, -1);
 				System.out.format("block absolute y: %.0f\n",
 						figure.getChildren().get(0).getLocalToSceneTransform().getTy());
 			}
