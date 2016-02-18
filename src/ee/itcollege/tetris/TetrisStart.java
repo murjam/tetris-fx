@@ -1,8 +1,14 @@
 package ee.itcollege.tetris;
 
+import java.util.List;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ee.itcollege.tetris.dao.ScoreFileDao;
+import ee.itcollege.tetris.entity.Score;
+import ee.itcollege.tetris.parts.Block;
+import ee.itcollege.tetris.parts.Figure;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -11,18 +17,37 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import ee.itcollege.tetris.parts.Block;
-import ee.itcollege.tetris.parts.Figure;
 
 public class TetrisStart extends Application {
 	
 	public static void main(String[] args) {
+		ScoreFileDao dao = new ScoreFileDao();
+		List<Score> scores = dao.loadScores();
+		
+		for (Score score : scores) {
+			System.out.format("%d %s\n", score.getScore(), score.getPlayerName());
+		}
+		
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("What is your name?");
+		String name = scanner.next();
+		
+		System.out.println("What is your score?");
+		int score = scanner.nextInt();
+		scanner.close();
+		
+		Score sc = new Score(name, score);
+		
+		scores.add(sc);
+		dao.persistScores(scores);
+		
+		
 		TetrisStart.launch(args);
 	}
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		
+			
 		Pane layout = new Pane();
 		
 		ObservableList<Node> contents = layout.getChildren();
