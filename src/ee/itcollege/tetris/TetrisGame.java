@@ -3,15 +3,15 @@ package ee.itcollege.tetris;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ee.itcollege.tetris.lib.FigureGenerator;
+import ee.itcollege.tetris.parts.Block;
+import ee.itcollege.tetris.parts.Figure;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import ee.itcollege.tetris.lib.FigureGenerator;
-import ee.itcollege.tetris.parts.Block;
-import ee.itcollege.tetris.parts.Figure;
 
 public class TetrisGame extends Application {
 	
