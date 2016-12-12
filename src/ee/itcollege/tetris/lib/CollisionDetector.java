@@ -17,5 +17,9 @@ public class CollisionDetector {
 	public static boolean collide(Shape s1, Shape s2) {
 		return s1.getBoundsInParent().intersects(s2.getBoundsInParent());
 	}
+	
+	public static boolean contains(Shape s1, Shape s2) {
+		return s1.getBoundsInParent().contains(s2.getBoundsInParent());
+	}
 
 }
