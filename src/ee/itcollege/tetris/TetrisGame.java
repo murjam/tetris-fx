@@ -1,19 +1,19 @@
 package ee.itcollege.tetris;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import ee.itcollege.tetris.lib.CollisionDetector;
 import ee.itcollege.tetris.lib.FigureGenerator;
 import ee.itcollege.tetris.parts.Block;
-import ee.itcollege.tetris.parts.Figure;
+import ee.itcollege.tetris.parts.BlockGroup;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.Group;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 public class TetrisGame extends Application {
@@ -23,36 +23,58 @@ public class TetrisGame extends Application {
 	}
 	
 	FigureGenerator figureGenerator = new FigureGenerator();
-	Figure figure = figureGenerator.createFigure();
-	Group fallenBlocks = new Group();
+	BlockGroup figure;
+	BlockGroup fallenBlocks = new BlockGroup();
+	Pane layout = new Pane();
+	Stage window;
+	
+	
+	private void createNewFigure() {
+		figure = figureGenerator.createFigure();
+		figure.move(10, 0);
+		Platform.runLater(() -> layout.getChildren().addAll(figure.getBlocks()));
+	}
 	
 
 	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void start(Stage window) throws Exception {
-		Pane layout = new Pane();
+		this.window = window;
+		createNewFigure();
+		for (int i = 0; i < 40; i++) {
+			fallenBlocks.addBlock(new Block(0, i));
+			fallenBlocks.addBlock(new Block(19, i));
+		}
+		for (int i = 0; i < 20; i++) {
+			fallenBlocks.addBlock(new Block(i, 34));
+		}
+		layout.getChildren().addAll(fallenBlocks.getBlocks());
 		
-		figure.move(9, 0);
-		layout.getChildren().add(figure);
-		layout.getChildren().add(fallenBlocks);
-		
-		Scene scene = new Scene(layout, Block.SIZE * 20, Block.SIZE * 40);
+		Scene scene = new Scene(layout, Block.SIZE * 20, Block.SIZE * 35);
 		scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
 			switch (event.getCode()) {
 			case UP:
 				figure.rotateClockwise();
+				if (CollisionDetector.collide(fallenBlocks, figure)) {
+					for (int i = 0; i < 3; i++) {
+						figure.rotateClockwise();
+					}
+				}
 				break;
 			case LEFT:
-				figure.move(-1, 0);
+				figure.moveIfPossible(-1, 0, fallenBlocks);
 				break;
 			case RIGHT:
-				figure.move(1, 0);
+				figure.moveIfPossible(1, 0, fallenBlocks);
+				break;
+			case SPACE:
+				while (figure.moveIfPossible(0, 1, fallenBlocks)) {
+					;
+				}
 				break;
 			case ESCAPE:
-				System.exit(0);
+				gameOver();
 			}
-//				System.out.format("first block absolute y: %.0f\n",
-//						figure.getChildren().get(0).getLocalToSceneTransform().getTy());
 		});
 		
 		Timer timer = new Timer();
@@ -60,22 +82,38 @@ public class TetrisGame extends Application {
 			@Override
 			public void run() {
 				figure.move(0, 1);
-				
-				if (figure.getLayoutY() >= scene.getHeight() - figure.getBoundsInParent().getHeight()
-						|| CollisionDetector.collide(fallenBlocks, figure)) {
-					Platform.runLater(() -> {
-						List<Block> blocks = figure.breakUp();
-						fallenBlocks.getChildren().addAll(blocks);
-						figure = figureGenerator.createFigure();
-						layout.getChildren().add(figure);
-					});
+				if (CollisionDetector.collide(fallenBlocks, figure)) {
+					figure.move(0, -1);
+					for (Block block : figure.getBlocks()) {
+						fallenBlocks.addBlock(block);
+					}
+					createNewFigure();
 				}
 			}
-		}, 200, 200);		
+		}, 200, 200);
 		
 		window.setOnCloseRequest(e -> System.exit(0));
 		window.setScene(scene);
 		window.show();
+	}
+	
+	private void gameOver() {
+		AnchorPane prompt = new AnchorPane();
+		Label nameLabel = new Label("Insert your name:");
+		TextField textField = new TextField();
+		textField.setOnAction(e -> {
+			System.out.format("User inserted theri name: %s", textField.getText());
+			System.exit(0);
+		});
+		AnchorPane.setTopAnchor(nameLabel, 150.);
+		AnchorPane.setLeftAnchor(nameLabel, 20.);
+		AnchorPane.setTopAnchor(textField, 200.);
+		AnchorPane.setLeftAnchor(textField, 20.);
+		AnchorPane.setRightAnchor(textField, 20.);
+		prompt.getChildren().addAll(nameLabel, textField);
+		
+		Scene scene = new Scene(prompt, Block.SIZE * 20, Block.SIZE * 35);
+		window.setScene(scene);
 	}
 
 }

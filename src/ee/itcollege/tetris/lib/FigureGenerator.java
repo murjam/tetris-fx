@@ -1,20 +1,52 @@
 package ee.itcollege.tetris.lib;
 
+
 import ee.itcollege.tetris.parts.Block;
-import ee.itcollege.tetris.parts.Figure;
+import ee.itcollege.tetris.parts.BlockGroup;
+import javafx.scene.paint.Color;
 
 public class FigureGenerator {
 	
-	public Figure createFigure() {
+	public BlockGroup createFigure() {
 
 		// TODO create different figures, choose randomly
 		
-		Figure figure = new Figure();
+		BlockGroup figure = new BlockGroup();
 		
-		figure.getChildren().add(new Block(-1, 0));
-		figure.getChildren().add(new Block(0, 0));
-		figure.getChildren().add(new Block(1, 0));
-		figure.getChildren().add(new Block(0, 1));
+		int x = 0;
+		int y = 0;
+		int lastX = x;
+		int lastY = y;
+		
+		Color color = Color.RED;
+		
+		
+		while (figure.getBlocks().size() < 4) {
+			boolean changeX = 0 == (int)(Math.random() * 2);
+			int change = 0 == (int)(Math.random() * 2) ? 1 : -1;
+			
+			if (changeX) {
+				x += change;
+			}
+			else {
+				y += change;
+			}
+			Block block = new Block(x, y);
+			
+			if (CollisionDetector.collide(figure, block)) {
+				x = lastX;
+				y = lastY;
+				continue;
+			}
+			lastX = x;
+			lastY = y;
+			block.setFill(color);
+			figure.addBlock(block);
+			if (figure.getBlocks().size() == 2) {
+				figure.setCenterBlock(block);
+			}
+		}
+		
 		
 		return figure;
 	}

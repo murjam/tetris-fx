@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import javafx.scene.Group;
 import ee.itcollege.tetris.parts.Block;
-import ee.itcollege.tetris.parts.Figure;
+import ee.itcollege.tetris.parts.BlockGroup;
 
 public class CollisionDetectorTest {
 
@@ -17,10 +17,10 @@ public class CollisionDetectorTest {
 		
 		Block block = new Block(1, 1);
 		
-		Figure figure = new Figure();
-		figure.getChildren().add(new Block(0, 0));
+		BlockGroup figure = new BlockGroup();
+		figure.addBlock(new Block(0, 0));
 		
-		parent.getChildren().add(figure);
+		parent.getChildren().addAll(figure.getBlocks());
 		parent.getChildren().add(block);
 		
 		assertFalse(CollisionDetector.collide(figure, block));
