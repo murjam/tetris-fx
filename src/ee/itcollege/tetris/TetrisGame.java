@@ -1,5 +1,6 @@
 package ee.itcollege.tetris;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -15,6 +16,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.scene.shape.Shape;
+import javafx.scene.shape.Rectangle;
 
 public class TetrisGame extends Application {
 	
@@ -24,7 +27,7 @@ public class TetrisGame extends Application {
 	
 	FigureGenerator figureGenerator = new FigureGenerator();
 	BlockGroup figure;
-	BlockGroup fallenBlocks = new BlockGroup();
+	ArrayList<Shape> fallenBlocks = new ArrayList<Shape>();
 	Pane layout = new Pane();
 	Stage window;
 	
@@ -41,13 +44,10 @@ public class TetrisGame extends Application {
 	public void start(Stage window) throws Exception {
 		this.window = window;
 		createNewFigure();
-		for (int i = 0; i < 40; i++) {
-			fallenBlocks.add(new Block(0, i));
-			fallenBlocks.add(new Block(19, i));
-		}
-		for (int i = 0; i < 20; i++) {
-			fallenBlocks.add(new Block(i, 34));
-		}
+		fallenBlocks.add(new Rectangle(0, 0, Block.SIZE, Block.SIZE * 34));
+		fallenBlocks.add(new Rectangle(Block.SIZE * 19, 0, Block.SIZE, Block.SIZE * 35));
+		fallenBlocks.add(new Rectangle(0, Block.SIZE * 34, Block.SIZE * 19, Block.SIZE));
+		
 		layout.getChildren().addAll(fallenBlocks);
 		
 		Scene scene = new Scene(layout, Block.SIZE * 20, Block.SIZE * 35);

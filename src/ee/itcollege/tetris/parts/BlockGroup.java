@@ -2,6 +2,7 @@ package ee.itcollege.tetris.parts;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
+import javafx.scene.shape.Shape;
 
 import ee.itcollege.tetris.lib.CollisionDetector;
 
@@ -46,7 +47,7 @@ public class BlockGroup extends ArrayList<Block> {
 		});
 	}
 
-	public boolean moveIfPossible(int deltaX, int deltaY, BlockGroup fallenBlocks) {
+	public boolean moveIfPossible(int deltaX, int deltaY, ArrayList<? extends Shape> fallenBlocks) {
 		move(deltaX, deltaY);
 		if (CollisionDetector.collide(this, fallenBlocks)) {
 			move(-deltaX, -deltaY);
