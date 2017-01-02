@@ -5,29 +5,24 @@ import java.util.function.Consumer;
 
 import ee.itcollege.tetris.lib.CollisionDetector;
 
-public class BlockGroup {
+@SuppressWarnings("serial")
+public class BlockGroup extends ArrayList<Block> {
 	
 	private Block centerBlock;
-	
-	private ArrayList<Block> blocks = new ArrayList<Block>();
-	
-	public void addBlock(Block block) {
-		if (blocks.isEmpty()) {
-			centerBlock = block;
-		}
-		blocks.add(block);
-	}
 	
 	public void setCenterBlock(Block centerBlock) {
 		this.centerBlock = centerBlock;
 	}
 	
-	public ArrayList<Block> getBlocks() {
-		return blocks;
+	public Block getCenterBlock() {
+		if (null == centerBlock) {
+			return get(0);
+		}
+		return centerBlock;
 	}
 	
 	public void eachBlock(Consumer<Block> consumer) {
-		for (Block block : blocks) {
+		for (Block block : this) {
 			consumer.accept(block);
 		}
 	}
@@ -40,8 +35,8 @@ public class BlockGroup {
 	}
 	
 	public void rotateClockwise() {
-		double centerY = centerBlock.getY();
-		double centerX = centerBlock.getX();
+		double centerY = getCenterBlock().getY();
+		double centerX = getCenterBlock().getX();
 		eachBlock(block -> {
 			
 			double x = block.getX() - centerX;

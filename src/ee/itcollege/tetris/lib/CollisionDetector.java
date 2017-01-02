@@ -14,7 +14,7 @@ public class CollisionDetector {
 	}
 
 	public static boolean collide(BlockGroup blocks, BlockGroup figure) {
-		for (Block block : blocks.getBlocks()) {
+		for (Block block : blocks) {
 			if (collide(figure, block)) {
 				return true;
 			}
@@ -23,8 +23,8 @@ public class CollisionDetector {
 	}
 
 	public static boolean collide(BlockGroup figure, Block block) {
-		for (Block b2 : figure.getBlocks()) {
-			if (collide(block, b2)) {
+		for (Block b : figure) {
+			if (collide(block, b)) {
 				return true;
 			}
 		}

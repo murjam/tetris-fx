@@ -32,7 +32,7 @@ public class TetrisGame extends Application {
 	private void createNewFigure() {
 		figure = figureGenerator.createFigure();
 		figure.move(10, 0);
-		Platform.runLater(() -> layout.getChildren().addAll(figure.getBlocks()));
+		Platform.runLater(() -> layout.getChildren().addAll(figure));
 	}
 	
 
@@ -42,13 +42,13 @@ public class TetrisGame extends Application {
 		this.window = window;
 		createNewFigure();
 		for (int i = 0; i < 40; i++) {
-			fallenBlocks.addBlock(new Block(0, i));
-			fallenBlocks.addBlock(new Block(19, i));
+			fallenBlocks.add(new Block(0, i));
+			fallenBlocks.add(new Block(19, i));
 		}
 		for (int i = 0; i < 20; i++) {
-			fallenBlocks.addBlock(new Block(i, 34));
+			fallenBlocks.add(new Block(i, 34));
 		}
-		layout.getChildren().addAll(fallenBlocks.getBlocks());
+		layout.getChildren().addAll(fallenBlocks);
 		
 		Scene scene = new Scene(layout, Block.SIZE * 20, Block.SIZE * 35);
 		scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
@@ -84,8 +84,8 @@ public class TetrisGame extends Application {
 				figure.move(0, 1);
 				if (CollisionDetector.collide(fallenBlocks, figure)) {
 					figure.move(0, -1);
-					for (Block block : figure.getBlocks()) {
-						fallenBlocks.addBlock(block);
+					for (Block block : figure) {
+						fallenBlocks.add(block);
 					}
 					createNewFigure();
 				}
@@ -102,7 +102,7 @@ public class TetrisGame extends Application {
 		Label nameLabel = new Label("Insert your name:");
 		TextField textField = new TextField();
 		textField.setOnAction(e -> {
-			System.out.format("User inserted theri name: %s", textField.getText());
+			System.out.format("User inserted their name: %s", textField.getText());
 			System.exit(0);
 		});
 		AnchorPane.setTopAnchor(nameLabel, 150.);

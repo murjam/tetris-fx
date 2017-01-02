@@ -11,9 +11,9 @@ public class FigureTest {
 	@Test
 	public void testRotate() {
 		BlockGroup figure = new BlockGroup();
-		figure.addBlock(new Block(0, 0));
+		figure.add(new Block(0, 0));
 		Block block = new Block(2, 1);
-		figure.addBlock(block);
+		figure.add(block);
 		// test initial values
 		assertEquals(2 * Block.SIZE, block.getX(), PRECISION);
 		assertEquals(1 * Block.SIZE, block.getY(), PRECISION);
@@ -41,7 +41,7 @@ public class FigureTest {
 	public void testMove1() {
 		BlockGroup figure = new BlockGroup();
 		Block block = new Block(0, 0);
-		figure.addBlock(block);
+		figure.add(block);
 		// test for initial values
 		assertEquals(0, block.getX(), PRECISION);
 		assertEquals(0, block.getY(), PRECISION);
@@ -61,7 +61,7 @@ public class FigureTest {
 	public void testMove2() {
 		BlockGroup figure = new BlockGroup();
 		Block block = new Block(0, 0);
-		figure.addBlock(block);
+		figure.add(block);
 		// testing for changing two values at once
 		figure.move(1, 2);
 		assertEquals(Block.SIZE, block.getX(), PRECISION);

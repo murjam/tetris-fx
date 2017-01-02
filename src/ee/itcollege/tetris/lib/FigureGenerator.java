@@ -21,7 +21,7 @@ public class FigureGenerator {
 		Color color = Color.RED;
 		
 		
-		while (figure.getBlocks().size() < 4) {
+		while (figure.size() < 4) {
 			boolean changeX = 0 == (int)(Math.random() * 2);
 			int change = 0 == (int)(Math.random() * 2) ? 1 : -1;
 			
@@ -41,8 +41,8 @@ public class FigureGenerator {
 			lastX = x;
 			lastY = y;
 			block.setFill(color);
-			figure.addBlock(block);
-			if (figure.getBlocks().size() == 2) {
+			figure.add(block);
+			if (figure.size() == 2) {
 				figure.setCenterBlock(block);
 			}
 		}

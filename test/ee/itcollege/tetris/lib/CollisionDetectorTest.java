@@ -18,9 +18,9 @@ public class CollisionDetectorTest {
 		Block block = new Block(1, 1);
 		
 		BlockGroup figure = new BlockGroup();
-		figure.addBlock(new Block(0, 0));
+		figure.add(new Block(0, 0));
 		
-		parent.getChildren().addAll(figure.getBlocks());
+		parent.getChildren().addAll(figure);
 		parent.getChildren().add(block);
 		
 		assertFalse(CollisionDetector.collide(figure, block));
