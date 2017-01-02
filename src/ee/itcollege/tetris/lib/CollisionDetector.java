@@ -15,7 +15,8 @@ public class CollisionDetector {
 	 * @return true, if there is a collision
 	 */
 	public static boolean collide(Shape s1, Shape s2) {
-		return s1.getBoundsInParent().intersects(s2.getBoundsInParent());
+		Shape intersect = Shape.intersect(s1, s2);
+		return intersect.getBoundsInLocal().getWidth() != -1;
 	}
 
 }
