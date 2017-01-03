@@ -1,7 +1,7 @@
 package ee.itcollege.tetris.lib;
 
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javafx.scene.shape.Shape;
 
@@ -12,7 +12,7 @@ public class CollisionDetector {
 		return intersect.getBoundsInLocal().getWidth() != -1;
 	}
 	
-	public static boolean collide(ArrayList<? extends Shape> blocks, Shape s) {
+	public static boolean collide(List<? extends Shape> blocks, Shape s) {
 		for (Shape b : blocks) {
 			if (collide(s, b)) {
 				return true;
@@ -21,7 +21,7 @@ public class CollisionDetector {
 		return false;
 	}
 
-	public static boolean collide(ArrayList<? extends Shape> blocks1, ArrayList<? extends Shape> blocks2) {
+	public static boolean collide(List<? extends Shape> blocks1, List<? extends Shape> blocks2) {
 		for (Shape block : blocks1) {
 			if (collide(blocks2, block)) {
 				return true;
