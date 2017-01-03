@@ -2,12 +2,18 @@ package ee.tthk.tetris;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import ee.tthk.tetris.entity.Player;
 import ee.tthk.tetris.lib.CollisionDetector;
 import ee.tthk.tetris.lib.FigureGenerator;
 import ee.tthk.tetris.parts.Block;
@@ -15,8 +21,13 @@ import ee.tthk.tetris.parts.Figure;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -24,7 +35,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class TetrisGame extends Application {
-	
+	// entity
 	public static final int FIELD_HEIGHT = 30;
 	public static final int FIELD_WIDHT = 15;
 	
@@ -36,22 +47,29 @@ public class TetrisGame extends Application {
 		System.exit(0);
 	}
 	
+	EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("test");
 	FigureGenerator figureGenerator = new FigureGenerator();
 	Figure figure;
 	ArrayList<Shape> gameField = new ArrayList<>();
 	ArrayList<Block> fallenBlocks = new ArrayList<>();
 	Pane layout = new Pane();
+	Stage window;
 	
 	public void createFigure() {
 		Platform.runLater(() -> {
 			figure = figureGenerator.createFigure();
 			figure.move(FIELD_WIDHT / 2, 0);
 			layout.getChildren().addAll(figure);
+			if (CollisionDetector.collide(figure, fallenBlocks)) {
+				// game over
+				gameOver();
+			}
 		});
 	}
 
 	@Override
 	public void start(Stage window) throws Exception {
+		this.window = window;
 		createFigure();
 		
 		Rectangle rectangle = new Rectangle(0, 0, Block.SIZE - 1, Block.SIZE * FIELD_HEIGHT);
@@ -100,8 +118,7 @@ public class TetrisGame extends Application {
 					;
 				break;
 			case ESCAPE:
-				window.close();
-				exit(null);
+				gameOver();
 				break;
 			default:
 				break;
@@ -164,6 +181,46 @@ public class TetrisGame extends Application {
 			}
 			lastBlock = block;
 		}
+	}
+	
+	private void gameOver() {
+		AnchorPane prompt = new AnchorPane();
+		Label nameLabel = new Label("Insert your name:");
+		TextField textField = new TextField();
+		textField.setOnAction(e -> {
+			String name = textField.getText();
+			System.out.format("User inserted their name: %s", name);
+			
+			EntityManager em = entityManagerFactory.createEntityManager();
+			em.getTransaction().begin();
+			Player player = new Player();
+			player.setName(name);
+			em.persist(player);
+			em.getTransaction().commit();
+			em.close();
+			
+			System.exit(0);
+		});
+		AnchorPane.setTopAnchor(nameLabel, 20.);
+		AnchorPane.setLeftAnchor(nameLabel, 20.);
+		AnchorPane.setTopAnchor(textField, 50.);
+		AnchorPane.setLeftAnchor(textField, 20.);
+		AnchorPane.setRightAnchor(textField, 20.);
+		
+		EntityManager em = entityManagerFactory.createEntityManager();
+		List<Player> allPlayers = em.createQuery("from Player p order by p.points desc").getResultList();
+		VBox list = new VBox();
+		for (Player player : allPlayers) {
+			list.getChildren().add(new Label(player.getName() + " " + player.getPoints()));
+		}
+		em.close();
+		AnchorPane.setBottomAnchor(list, 20.);
+		AnchorPane.setLeftAnchor(list, 20.);
+		
+		prompt.getChildren().addAll(nameLabel, textField, list);
+		
+		Scene scene = new Scene(prompt, Block.SIZE * 10, Block.SIZE * 20);
+		window.setScene(scene);
 	}
 
 }
