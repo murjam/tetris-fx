@@ -5,6 +5,10 @@ import java.util.List;
 
 import javafx.scene.shape.Shape;
 
+/**
+ * JavaFX collision detector for {Shape}s and {List}s of {Shape}s
+ * @author Mikk Mangus
+ */
 public class CollisionDetector {
 
 	public static boolean collide(Shape s1, Shape s2) {

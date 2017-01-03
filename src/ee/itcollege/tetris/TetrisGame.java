@@ -1,9 +1,14 @@
 package ee.itcollege.tetris;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+
+import ee.itcollege.tetris.entity.User;
 import ee.itcollege.tetris.lib.CollisionDetector;
 import ee.itcollege.tetris.lib.FigureGenerator;
 import ee.itcollege.tetris.parts.Block;
@@ -22,6 +27,12 @@ import javafx.scene.shape.Rectangle;
 public class TetrisGame extends Application {
 	
 	public static void main(String[] args) {
+		
+		EntityManager em = Persistence.createEntityManagerFactory("test").createEntityManager();
+		List<User> users = em.createQuery("from User").getResultList();
+		System.out.println(users.size());
+		em.close();
+		
 		TetrisGame.launch(args);
 	}
 	
@@ -102,17 +113,27 @@ public class TetrisGame extends Application {
 		Label nameLabel = new Label("Insert your name:");
 		TextField textField = new TextField();
 		textField.setOnAction(e -> {
-			System.out.format("User inserted their name: %s", textField.getText());
+			String name = textField.getText();
+			System.out.format("User inserted their name: %s", name);
+			
+			EntityManager em = Persistence.createEntityManagerFactory("test").createEntityManager();
+			em.getTransaction().begin();
+			User user = new User();
+			user.setName(name);
+			em.persist(user);
+			em.getTransaction().commit();
+			em.close();
+			
 			System.exit(0);
 		});
-		AnchorPane.setTopAnchor(nameLabel, 150.);
+		AnchorPane.setTopAnchor(nameLabel, 20.);
 		AnchorPane.setLeftAnchor(nameLabel, 20.);
-		AnchorPane.setTopAnchor(textField, 200.);
+		AnchorPane.setTopAnchor(textField, 50.);
 		AnchorPane.setLeftAnchor(textField, 20.);
 		AnchorPane.setRightAnchor(textField, 20.);
 		prompt.getChildren().addAll(nameLabel, textField);
 		
-		Scene scene = new Scene(prompt, Block.SIZE * 20, Block.SIZE * 35);
+		Scene scene = new Scene(prompt, Block.SIZE * 10, Block.SIZE * 8);
 		window.setScene(scene);
 	}
 
