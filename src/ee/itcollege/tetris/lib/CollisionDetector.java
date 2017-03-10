@@ -1,4 +1,4 @@
-package ee.tthk.tetris.lib;
+package ee.itcollege.tetris.lib;
 
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package ee.tthk.tetris.lib;
+package ee.itcollege.tetris.lib;
 
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.transform.Rotate;
