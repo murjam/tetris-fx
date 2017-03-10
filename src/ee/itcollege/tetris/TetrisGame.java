@@ -28,7 +28,7 @@ public class TetrisGame extends Application {
 		Scene scene = new Scene(layout,
 				Block.SIZE * FIELD_WIDHT,
 				Block.SIZE * FIELD_HEIGHT);
-		
+
 		scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
 			System.out.println(event.getCode());
 		});
