@@ -7,8 +7,8 @@ public class Block extends Rectangle {
 
 	public static final int SIZE = 20;
 
-	public Block(double x, double y) {
-		super(x * SIZE, y * SIZE, SIZE, SIZE);
+	public Block(int x, int y) {
+		super(x * SIZE, y * SIZE, SIZE - 1, SIZE - 1);
 
 		setFill(Color.BLACK);
 	}
