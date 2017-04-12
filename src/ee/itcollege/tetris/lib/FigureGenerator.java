@@ -9,10 +9,18 @@ public class FigureGenerator {
 
 		Figure figure = new Figure();
 
-		figure.add(new Block(0, 0));
-		figure.add(new Block(-1, 0));
-		figure.add(new Block(1, 0));
-		figure.add(new Block(0, 1));
+		if (Math.random() < 0.5) {
+			figure.add(new Block(0, 0));
+			figure.add(new Block(-1, 0));
+			figure.add(new Block(1, 0));
+			figure.add(new Block(0, 1));
+		}
+		else {
+			figure.add(new Block(0, 0));
+			figure.add(new Block(0, 1));
+			figure.add(new Block(0, 2));
+			figure.add(new Block(1, 2));
+		}
 
 		return figure;
 	}
